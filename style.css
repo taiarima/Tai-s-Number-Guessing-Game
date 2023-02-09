@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap");
 
 * {
   margin: 0;
@@ -12,11 +12,10 @@ html {
 }
 
 body {
-  font-family: 'Papyrus';
+  font-family: "Papyrus";
   color: #eee;
   background-color: #222;
   /* background-color: #60b347; */
-
 }
 
 /* LAYOUT */
@@ -44,6 +43,11 @@ main {
 .right {
   width: 52rem;
   font-size: 2rem;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 80px;
 }
 
 /* ELEMENTS STYLE */
@@ -127,5 +131,10 @@ h1 {
 
 .label-highscore {
   font-size: 30px;
+  font-weight: bold;
+}
+
+.numbers-guessed-list {
+  font-size: 20px;
   font-weight: bold;
 }
