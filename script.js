@@ -1,67 +1,50 @@
 `use strict`;
+
+
 window.onload = function () {
+  // I am leaving this here even though it's not currently in use since I might do something with it later
   // your code here
 };
 
-// Set up a new game after hitting the `again` button
-function reset() {
-  document.querySelector(`.guess`).disabled = false;
-  document.querySelector(`.guess`).value = "";
-  document.querySelector(`.guess`).select();
-  flashState = false;
-  console.log(`entered reset method`);
-  gameOverBool = false;
-  document.querySelector(`.check`).textContent = `Guess!`;
-  document.querySelector(`.again`).style.display = `block`;
-  guessRange = 100; // this should be changeable by user input
-  numToGuess = Math.trunc(Math.random() * guessRange) + 1;
-  guessesCounter = 0;
-  bestScore = Number.MAX_VALUE;
-  document.querySelector(`.number`).textContent = `?`; // This should be changed to a question mark in the final version
-  document.querySelector(`.between`).textContent = `Range 1 to ${guessRange}`;
-  document.querySelector(`body`).style.backgroundColor = myGray;
-  document.querySelector(`.number`).style.width = `15rem`;
-  document.querySelector(`.btn`).style.color = myGray;
-  document.querySelector(`.check`).style.color = myGray;
-  document.querySelector(`.number`).style.color = myGray;
-  document.querySelector(`.message`).textContent = `Guess a number!`;
-  document.querySelector(`.score`).textContent = guessesCounter;
-  guessesArray = [];
-  guessesList.textContent = "";
-}
-
-let flashState = false;
-let myPurple = `#95257d`;
-let myRed = `#e02e2e`;
-let myGray = `#222`;
-let myGreen = `#60b347`;
-let redFlash = ``;
-let guessRange = 100;
+// Variables for handling game logic
+let guessRange = 100; // In the current version this never changes, but I want to later make a version where the user can pick the range
 let numToGuess = Math.trunc(Math.random() * guessRange) + 1;
 let guessesCounter = 0;
 let bestScore = Number.MAX_VALUE;
+let gameOverBool = false;
+
+// Variables for changing appearance
+const flashState = false;
+const myPurple = `#95257d`;
+const myRed = `#e02e2e`;
+const myGray = `#222`;
+const myGreen = `#60b347`;
+
+// Stuff for handling text displayed
+let guessesList = document.querySelector(`.guesses-list`);
+let guessesArray = [];
 document.querySelector(`.number`).textContent = `?`;
 document.querySelector(`.between`).textContent = `Range 1 to ${guessRange}`;
 
-let lowMessages = [
+const lowMessages = [
   `Too low! Try again!`,
   `You have guessed too low. Try a higher number!`,
   `You're still too low, guess a greater number!`,
 ];
 
-let highMessages = [
+const highMessages = [
   `Too high! Try again!`,
   `You have guessed too high. Keep on trying!`,
   `Not quite there, go even lower!`,
 ];
 
-let duplicateMessages = [
+const duplicateMessages = [
   `You already tried that number! Try a different one!`,
   `Did you think it would work this time? You already tried that!`,
   `Come on, be original! You already tried that number.`,
 ];
 
-let invalidMessages = [
+const invalidMessages = [
   `You have not entered a valid number 🫤`,
   `Dude, you gotta enter an actual number 🫤`,
   `You're just clicking that without entering a number, aren't you... 🫤`,
@@ -72,19 +55,7 @@ let highCounter = 0;
 let duplicateCounter = 0;
 let invalidCounter = 0;
 
-// When user wins or loses
-function gameOver() {
-  document.querySelector(`.check`).textContent = `Play again!`;
-  document.querySelector(`.again`).style.display = `none`;
-  gameOverBool = true;
-}
-
-let gameOverBool = false;
-// Play again button
-document.querySelector(`.again`).addEventListener(`click`, function () {
-  reset();
-});
-
+// Event Handlers
 document.querySelector(`.check`).addEventListener(`click`, function () {
   checkGuess();
 });
@@ -93,30 +64,11 @@ document.querySelector(`.guess`).addEventListener(`keypress`, function (event) {
     checkGuess();
   }
 });
+document.querySelector(`.again`).addEventListener(`click`, function () {
+  reset();
+});
 
-function flashPurple() {
-  document.body.classList.add(`flash-purple`);
-  setTimeout(() => {
-    document.body.classList.remove(`flash-purple`);
-  }, 300);
-}
-
-function handleFlash(color) {
-  if (!flashState) {
-    document.querySelector(`body`).style.backgroundColor = color;
-    flashState = true;
-    setTimeout(() => {
-      document.querySelector(`body`).style.backgroundColor = myGray;
-      flashState = false;
-    }, 300);
-  }
-}
-
-let guessesList = document.querySelector(`.guesses-list`);
-let guessesArray = [];
-
-// Handling user input
-//document.querySelector(`.check`).addEventListener(`click`, function () {
+// Main game logic method for handling user input
 function checkGuess() {
   const userGuess = Number(document.querySelector(`.guess`).value);
 
@@ -206,5 +158,51 @@ function checkGuess() {
     // document.querySelector(`.label-score`).textContent = `⚠️ Guesses:`;  <-- Figure out why this line of code doesn't work
     document.querySelector(`.score`).textContent =
       guessesCounter + ` (Max allowed)`;
+  }
+}
+
+// Sets up a new game by resetting the game to original state
+function reset() {
+  document.querySelector(`.guess`).disabled = false;
+  document.querySelector(`.guess`).value = "";
+  document.querySelector(`.guess`).select();
+  flashState = false;
+  console.log(`entered reset method`);
+  gameOverBool = false;
+  document.querySelector(`.check`).textContent = `Guess!`;
+  document.querySelector(`.again`).style.display = `block`;
+  guessRange = 100; // this should be changeable by user input
+  numToGuess = Math.trunc(Math.random() * guessRange) + 1;
+  guessesCounter = 0;
+  bestScore = Number.MAX_VALUE;
+  document.querySelector(`.number`).textContent = `?`;
+  document.querySelector(`.between`).textContent = `Range 1 to ${guessRange}`;
+  document.querySelector(`body`).style.backgroundColor = myGray;
+  document.querySelector(`.number`).style.width = `15rem`;
+  document.querySelector(`.btn`).style.color = myGray;
+  document.querySelector(`.check`).style.color = myGray;
+  document.querySelector(`.number`).style.color = myGray;
+  document.querySelector(`.message`).textContent = `Guess a number!`;
+  document.querySelector(`.score`).textContent = guessesCounter;
+  guessesArray = [];
+  guessesList.textContent = "";
+}
+
+// When user wins or loses
+function gameOver() {
+  document.querySelector(`.check`).textContent = `Play again!`;
+  document.querySelector(`.again`).style.display = `none`;
+  gameOverBool = true;
+}
+
+// Flashes the background of the screen when user enters invalid number or incorrect response
+function handleFlash(color) {
+  if (!flashState) {
+    document.querySelector(`body`).style.backgroundColor = color;
+    flashState = true;
+    setTimeout(() => {
+      document.querySelector(`body`).style.backgroundColor = myGray;
+      flashState = false;
+    }, 300);
   }
 }

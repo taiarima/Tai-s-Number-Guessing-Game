@@ -1,0 +1,11 @@
+<!-- This is a simple number guessing game. The current version generates a pseudo-random number between 1 and 100. The user is
+- prompted to guess the number. The user will be notified whether their guess is higher or lower than the target number.
+- The background flashes red if the user has guessed incorrectly, and flashes purple if the user attempts a duplicate answer,
+- does not enter any input, or tries guessing a number outside of the range. If the user is unable to guess the target number after
+- guessRange / 4 guesses, then they lose, and the game is over. The user wins when correctly entering the target number.
+- In either end state, the user can start a new game by clicking the button labeled "Play again!". The game keeps track of the best (lowest)
+- score, and has some other cute features. Feel free to let me know if you have any comments.
+-
+- This version is complete, but I would like to add additional functionality users to choose their own range in a future version.
+- Completed February 10, 2023 by Tai Arima, with style template provided by Jonas Schmedtmann.
+ -->
