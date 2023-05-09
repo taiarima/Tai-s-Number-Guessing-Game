@@ -1,10 +1,18 @@
 `use strict`;
 
-
-window.onload = function () {
-  // I am leaving this here even though it's not currently in use since I might do something with it later
-  // your code here
-};
+// <<Selecting elements>>
+// Buttons
+const againButton = document.querySelector(".again");
+const checkGuessButton = document.querySelector(".check");
+// Inputs
+const guessInput = document.querySelector(".guess");
+// Labels
+const guessesListLabel = document.querySelector(".guesses-list");
+const highscoreLabel = document.querySelector(".highscore");
+const messageLabel = document.querySelector(".message");
+const numberLabel = document.querySelector(".number");
+const rangeLabel = document.querySelector(".range");
+const scoreLabel = document.querySelector(".score");
 
 // Variables for handling game logic
 let guessRange = 100; // In the current version this never changes, but I want to later make a version where the user can pick the range
@@ -20,12 +28,7 @@ const myRed = `#e02e2e`;
 const myGray = `#222`;
 const myGreen = `#60b347`;
 
-// Stuff for handling text displayed
-let guessesList = document.querySelector(`.guesses-list`);
-let guessesArray = [];
-document.querySelector(`.number`).textContent = `?`;
-document.querySelector(`.between`).textContent = `Range 1 to ${guessRange}`;
-
+// Variables for showing user feedback messages
 const lowMessages = [
   `Too low! Try again!`,
   `You have guessed too low. Try a higher number!`,
@@ -55,22 +58,14 @@ let highCounter = 0;
 let duplicateCounter = 0;
 let invalidCounter = 0;
 
-// Event Handlers
-document.querySelector(`.check`).addEventListener(`click`, function () {
-  checkGuess();
-});
-document.querySelector(`.guess`).addEventListener(`keypress`, function (event) {
-  if (event.key === `Enter`) {
-    checkGuess();
-  }
-});
-document.querySelector(`.again`).addEventListener(`click`, function () {
-  reset();
-});
+// Initiate game TODO : Refactor into a method
+const guessesArray = [];
+numberLabel.textContent = `?`;
+rangeLabel.textContent = `Range 1 to ${guessRange}`;
 
 // Main game logic method for handling user input
 function checkGuess() {
-  const userGuess = Number(document.querySelector(`.guess`).value);
+  const userGuess = Number(messageLabel.value); // is it necessary to cast here?
 
   // The button click will start a new game if the game is over
   if (gameOverBool) {
@@ -80,26 +75,24 @@ function checkGuess() {
 
   // Invalid Input Handler
   if (!userGuess) {
-    document.querySelector(`.message`).textContent =
+    messageLabel.textContent =
       invalidMessages[invalidCounter % invalidMessages.length];
     invalidCounter++;
     handleFlash(myPurple);
-    document.querySelector(`.guess`).select();
+    guessInput.select();
     return;
   }
   if (userGuess > guessRange || userGuess < 0) {
-    document.querySelector(
-      `.message`
-    ).textContent = `You must enter a number between 1 and ${guessRange}! 😠`;
+    messageLabel.textContent = `You must enter a number between 1 and ${guessRange}! 😠`;
     handleFlash(myPurple);
-    document.querySelector(`.guess`).select();
+    guessInput.select();
     return;
   }
 
   // User attempts duplicate guess
   if (guessesArray.includes(userGuess)) {
     handleFlash(myPurple);
-    document.querySelector(`.message`).textContent =
+    messageLabel.textContent =
       duplicateMessages[duplicateCounter % duplicateMessages.length];
     duplicateCounter++;
     return;
@@ -108,38 +101,34 @@ function checkGuess() {
   // User has guessed correctly
   else if (userGuess === numToGuess) {
     gameOver();
-    document.querySelector(`.guess`).setAttribute(`disabled`, ``);
-    document.querySelector(`body`).style.backgroundColor = myGreen;
-    document.querySelector(`.btn`).style.color = myGreen;
-    document.querySelector(`.check`).style.color = myGreen;
-    document.querySelector(`.number`).style.color = myGreen;
-    document.querySelector(`.number`).style.width = `30rem`;
-    document.querySelector(`.number`).textContent = numToGuess;
-    document.querySelector(
-      `.message`
-    ).textContent = `🎉 You have guessed correctly!`;
+    guessInput.setAttribute(`disabled`, ``);
+    document.querySelector(`body`).style.backgroundColor = myGreen; // not sure what this is doing... seems wrong TODO
+    // document.querySelector(`.btn`).style.color = myGreen;
+    checkGuessButton.style.color = myGreen;
+    numberLabel.style.color = myGreen;
+    numberLabel.style.width = `30rem`;
+    numberLabel.textContent = numToGuess;
+    messageLabel.textContent = `🎉 You have guessed correctly!`;
     guessesCounter++;
     bestScore = Math.min(bestScore, guessesCounter);
-    document.querySelector(`.highscore`).textContent = bestScore;
-    document.querySelector(`.score`).textContent = guessesCounter;
+    highscoreLabel.textContent = bestScore;
+    scoreLabel.textContent = guessesCounter;
     return;
   }
 
   // Incorrect Guesses
   else if (userGuess > numToGuess) {
-    document.querySelector(`.message`).textContent =
-      highMessages[highCounter % highMessages.length];
+    messageLabel.textContent = highMessages[highCounter % highMessages.length];
     highCounter++;
   } else if (userGuess < numToGuess) {
-    document.querySelector(`.message`).textContent =
-      lowMessages[lowCounter % lowMessages.length];
+    messageLabel.textContent = lowMessages[lowCounter % lowMessages.length];
     lowCounter++;
   }
   guessesCounter++;
-  document.querySelector(`.score`).textContent = guessesCounter;
+  scoreLabel.textContent = guessesCounter;
   guessesArray.push(userGuess);
   guessesList.textContent = guessesArray.join(`, `);
-  document.querySelector(`.guess`).select();
+  guessInput.select();
 
   // Flash the screen red when user gets the answer incorrect
   handleFlash(myRed);
@@ -147,14 +136,12 @@ function checkGuess() {
   // User has guessed too many times and loses
   if (guessesCounter >= Math.round(guessRange / 4)) {
     gameOver();
-    document.querySelector(`.guess`).setAttribute(`disabled`, ``);
-    document.querySelector(
-      `.message`
-    ).textContent = `You have guessed too many times! You lose... 😥 (Try Googling "binary search")`;
-    document.querySelector(`.number`).textContent = `☠️`;
+    guessInput.setAttribute(`disabled`, ``);
+    messageLabel.textContent = `You have guessed too many times! You lose... 😥 (Try Googling "binary search")`;
+    numberLabel.textContent = `☠️`;
     document.querySelector(`body`).style.backgroundColor = myRed;
-    document.querySelector(`.btn`).style.color = myRed;
-    document.querySelector(`.check`).style.color = myRed;
+    document.querySelector(`.btn`).style.color = myRed; // investigate this TODO
+    checkGuessButton.style.color = myRed;
     // document.querySelector(`.label-score`).textContent = `⚠️ Guesses:`;  <-- Figure out why this line of code doesn't work
     document.querySelector(`.score`).textContent =
       guessesCounter + ` (Max allowed)`;
@@ -190,8 +177,8 @@ function reset() {
 
 // When user wins or loses
 function gameOver() {
-  document.querySelector(`.check`).textContent = `Play again!`;
-  document.querySelector(`.again`).style.display = `none`;
+  checkGuessButton.textContent = `Play again!`;
+  againButton.style.display = `none`;
   gameOverBool = true;
 }
 
@@ -206,3 +193,18 @@ function handleFlash(color) {
     }, 300);
   }
 }
+
+// Event Handlers
+checkGuessButton.addEventListener(`click`, function () {
+  checkGuess();
+});
+guessInput.addEventListener(`keypress`, function (event) {
+  if (event.key === `Enter`) {
+    checkGuess();
+  }
+});
+againButton.addEventListener(`click`, function () {
+  reset();
+});
+// q: The flash feature of this code isn't working anymore... why?
+// A: not sure, but I think it has something to do with the fact that the flashState variable is being set to true and then immediately set to false again.  I think the setTimeout function is being called before the flashState variable is set to true, so it's not working.  I think I need to use a callback function to make sure the flashState variable is set to true before the setTimeout function is called.
