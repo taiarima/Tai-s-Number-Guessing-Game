@@ -65,7 +65,7 @@ rangeLabel.textContent = `Range 1 to ${guessRange}`;
 
 // Main game logic method for handling user input
 function checkGuess() {
-  const userGuess = Number(guessInput.value); // is it necessary to cast here?
+  const userGuess = Number(guessInput.value);
 
   // The button click will start a new game if the game is over
   if (gameOverBool) {
@@ -102,8 +102,8 @@ function checkGuess() {
   else if (userGuess === numToGuess) {
     gameOver();
     guessInput.setAttribute(`disabled`, ``);
-    document.querySelector(`body`).style.backgroundColor = myGreen; // not sure what this is doing... seems wrong TODO
-    // document.querySelector(`.btn`).style.color = myGreen;
+    document.querySelector(`body`).style.backgroundColor = myGreen;
+    document.querySelector(`.btn`).style.color = myGreen;
     checkGuessButton.style.color = myGreen;
     numberLabel.style.color = myGreen;
     numberLabel.style.width = `30rem`;
@@ -168,7 +168,7 @@ function reset() {
   document.querySelector(`.btn`).style.color = myGray;
   checkGuessButton.style.color = myGray;
   numberLabel.style.color = myGray;
-  messageLabel.textContent = `Guess a number!`;
+  messageLabel.textContent = `Guess what number I'm thinking of!`;
   scoreLabel.textContent = guessesCounter;
   guessesArray = [];
   guessesListLabel.textContent = "";
@@ -205,5 +205,3 @@ guessInput.addEventListener(`keypress`, function (event) {
 againButton.addEventListener(`click`, function () {
   reset();
 });
-// q: The flash feature of this code isn't working anymore... why?
-// A: not sure, but I think it has something to do with the fact that the flashState variable is being set to true and then immediately set to false again.  I think the setTimeout function is being called before the flashState variable is set to true, so it's not working.  I think I need to use a callback function to make sure the flashState variable is set to true before the setTimeout function is called.
